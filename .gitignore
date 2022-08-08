@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+matrix-mult/
+*.csv
+*.txt
+.vscode/
+*.x
