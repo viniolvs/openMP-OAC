@@ -1,7 +1,7 @@
 #!/bin/bash
 gcc media.c -o media.x
 DIRETORIO="out"
-SIZE=100
+SIZE=15000
 
 echo "Tam Matriz,Número de threads,Tempo médio" >> $DIRETORIO/medias.csv
 for ((j=1 ; j<=8 ; j*=2))

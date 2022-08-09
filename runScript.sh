@@ -2,7 +2,7 @@
 make clean
 make
 DIRETORIO="out"
-SIZE=100
+SIZE=15000
 
 for ((j=1 ; j<=8 ; j*=2))
     do
