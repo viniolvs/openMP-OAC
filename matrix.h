@@ -39,13 +39,13 @@ double matrixSum(double **M, int l, int c);
 // Preenche a matriz com valores aleatórios
 // seed = false -> valores repetem entre execuções
 // seed = true -> valores aleatórios entre execuções
-void fillMatrix_P(double **M, int l, int c, bool seed);
+void fillMatrix_P(double **M, int l, int c, bool seed, short num_threads);
 
 // Retorna uma matriz com o quadrado de todos os elementos de uma matriz passada como parâmetro
-double** matrixSquare_P(double **M, int l, int c);
+double** matrixSquare_P(double **M, int l, int c, short num_threads);
 
 // Retorna a matriz das diferenças de duas matrizes
-double** twoMatrixSub_P(double **A, double**B, int l, int c);
+double** twoMatrixSub_P(double **A, double**B, int l, int c, short num_threads);
 
 // Retorna a soma de todos os elementos de uma matriz
-double matrixSum_P(double **M, int l, int c);
+double matrixSum_P(double **M, int l, int c, short num_threads);

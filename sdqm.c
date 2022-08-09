@@ -12,18 +12,21 @@ int main(int argc, char *argv[])
     if (argc < 4 || argc > 5)
     {
         printf("Invalid format!\n");
-        printf("./sdqm.x l c p|s\n");
+        printf("./sdqm.x <lin | col> <num_threads> p|s\n");
+        printf("p = paralelo   s = sequencial\n");
         return 0;
     }
-    int l, c;
+    int l, c, num_threads;
     char *mode;
     l = atoi(argv[1]);
-    c = atoi(argv[2]);
+    c = l;
+    num_threads = atoi(argv[2]);
     mode = argv[3];
     if (strcmp(mode,"p") && strcmp(mode,"s"))
     {
         printf("Invalid format!\n");
-        printf("./sdqm.x l c p|s\n");
+        printf("./sdqm.x <lin | col> <num_threads> p|s\n");
+        printf("p = paralelo   s = sequencial\n");
         return 0;
     }
 
@@ -55,12 +58,12 @@ int main(int argc, char *argv[])
     {
         double begin, end;
         begin = omp_get_wtime();
-        fillMatrix_P(A, l, c, false);
-        fillMatrix_P(B, l, c, false);
-        A2 = matrixSquare_P(A, l, c);
-        B2 = matrixSquare_P(B, l, c);
-        C = twoMatrixSub_P(A2, B2, l, c);
-        D = matrixSum_P(C, l, c);
+        fillMatrix_P(A, l, c, false, num_threads);
+        fillMatrix_P(B, l, c, false, num_threads);
+        A2 = matrixSquare_P(A, l, c, num_threads);
+        B2 = matrixSquare_P(B, l, c, num_threads);
+        C = twoMatrixSub_P(A2, B2, l, c, num_threads);
+        D = matrixSum_P(C, l, c, num_threads);
         end = omp_get_wtime();
         time = end - begin;
     }

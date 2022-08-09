@@ -31,6 +31,34 @@ void printMatrix(double **M, int l, int c)
     printf("\n");
 }
 
+void exportToFile(double **M, int l, int c, char *Matrix, char *filename, bool csv)
+{
+    FILE *file;
+    file = fopen(filename,"a");
+
+    int i,j;
+    char buffer[100];
+
+    fputs(Matrix, file);
+    fputc('\n', file);
+
+    for(i = 0; i < l; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            sprintf(buffer, "%lf", M[i][j]);
+            fputs(buffer, file);
+            if(csv)
+                fputc(',',file);
+            else
+                fputc(' ',file);
+        }
+        fputc('\n', file);
+    }
+    fputc('\n',file);
+    fclose(file);
+}
+
 void fillMatrix(double **M, int l, int c, bool seed)
 {
     int i,j;
@@ -72,39 +100,11 @@ double matrixSum(double **M, int l, int c)
     return sum;
 }
 
-void exportToFile(double **M, int l, int c, char *Matrix, char *filename, bool csv)
-{
-    FILE *file;
-    file = fopen(filename,"a");
-
-    int i,j;
-    char buffer[100];
-
-    fputs(Matrix, file);
-    fputc('\n', file);
-
-    for(i = 0; i < l; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            sprintf(buffer, "%lf", M[i][j]);
-            fputs(buffer, file);
-            if(csv)
-                fputc(',',file);
-            else
-                fputc(' ',file);
-        }
-        fputc('\n', file);
-    }
-    fputc('\n',file);
-    fclose(file);
-}
-
-void fillMatrix_P(double **M, int l, int c, bool seed)
+void fillMatrix_P(double **M, int l, int c, bool seed, short num_threads)
 {
     int i,j;
     clock_t clk = clock();
-    omp_set_num_threads(NUM_THREADS);
+    omp_set_num_threads(num_threads);
     #pragma omp parallel shared(i, M, clk) private(j)
     if (seed)
         srand(clk);
@@ -114,11 +114,11 @@ void fillMatrix_P(double **M, int l, int c, bool seed)
             M[i][j] = ((double)rand() * 1000.0) / ((double)RAND_MAX);
 }
 
-double** matrixSquare_P(double **M, int l, int c)
+double** matrixSquare_P(double **M, int l, int c, short num_threads)
 {
     double **M2 = newMatrix(l, c);
     int i, j;
-    omp_set_num_threads(NUM_THREADS);
+    omp_set_num_threads(num_threads);
     #pragma omp parallel shared(i, M2, M) private(j)
     #pragma omp for
     for (i = 0; i < l; i++)
@@ -127,11 +127,11 @@ double** matrixSquare_P(double **M, int l, int c)
     return M2;
 }
 
-double** twoMatrixSub_P(double **A, double**B, int l, int c)
+double** twoMatrixSub_P(double **A, double**B, int l, int c, short num_threads)
 {
     double **C = newMatrix(l, c);
     int i, j;
-    omp_set_num_threads(NUM_THREADS);
+    omp_set_num_threads(num_threads);
     #pragma omp parallel shared(i, C, A, B) private(j)
     #pragma omp for
     for (i = 0; i < l; i++)
@@ -140,11 +140,11 @@ double** twoMatrixSub_P(double **A, double**B, int l, int c)
     return C;
 }
 
-double matrixSum_P(double **M, int l, int c)
+double matrixSum_P(double **M, int l, int c, short num_threads)
 {
     int i, j;
     double sum = 0.0;
-    omp_set_num_threads(NUM_THREADS);
+    omp_set_num_threads(num_threads);
     #pragma omp parallel shared(M, i) private(j) reduction(+:sum)
     #pragma omp for
     for (i = 0; i < l; i++)
