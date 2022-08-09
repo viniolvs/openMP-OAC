@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
         clock_t begin, end;
         //preenche as matrizes
         begin = clock();
-        fillMatrix(A, l, c, false);
-        fillMatrix(B, l, c, false);
+        fillMatrix(A, l, c, true);
+        fillMatrix(B, l, c, true);
         A2 = matrixSquare(A, l, c);
         B2 = matrixSquare(B, l, c);
         C = twoMatrixSub(A2, B2, l, c);
@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
     {
         double begin, end;
         begin = omp_get_wtime();
-        fillMatrix_P(A, l, c, false, num_threads);
-        fillMatrix_P(B, l, c, false, num_threads);
+        fillMatrix_P(A, l, c, true, num_threads);
+        fillMatrix_P(B, l, c, true, num_threads);
         A2 = matrixSquare_P(A, l, c, num_threads);
         B2 = matrixSquare_P(B, l, c, num_threads);
         C = twoMatrixSub_P(A2, B2, l, c, num_threads);
